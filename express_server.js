@@ -20,10 +20,13 @@ function generateRandomString() {
   }
   return result;
 }
-generateRandomString()
 
 app.get("/", (req, res) => {
   res.send("hello");
+});
+
+app.get("/hello", (req, res) => {
+  res.send("<html><body> Hello World </b></body></html>\n")
 });
 
 app.get("/urls/new", (req, res) => {
@@ -36,8 +39,11 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);
-  res.send("OK")
+  //console.log(req.body);
+  let a = generateRandomString();
+  urlDatabase[a] = req.body.longURL; 
+  res.redirect(`/urls/${a}`)
+  
 });
 
 app.get("/urls.json",(req, res) => {
@@ -49,8 +55,12 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body> Hello World </b></body></html>\n")
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL]
+  // console.log(urlDatabase)
+  // console.log(req.params.shortURL) tried debugging with console log
+  // console.log(longURL)
+  res.redirect(longURL);
 });
 
 
@@ -59,3 +69,4 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
+//only works 
