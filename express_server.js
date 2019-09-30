@@ -12,17 +12,15 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-function generateRandomString(length) {
+function generateRandomString() {
   let result = "";
-  let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
   }
   return result;
 }
-
-generateRandomString(6)
+generateRandomString()
 
 app.get("/", (req, res) => {
   res.send("hello");
