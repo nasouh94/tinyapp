@@ -64,6 +64,11 @@ app.get("/urls.json", (req, res) => {
 app.post("/login", (req, res) => {
   console.log(req.body)
   res.cookie("username", req.body.username)
+  res.redirect("/urls");
+});
+
+app.post("/logout",(req, res) => {
+  res.clearCookie("username", req.body.username);
   res.redirect("/urls")
 });
 
@@ -77,7 +82,7 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL]
+  const longURL = urlDatabase[req.params.shortURL];
   // console.log(urlDatabase)
   // console.log(req.params.shortURL) tried debugging with console log
   // console.log(longURL)
@@ -92,7 +97,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.post("/urls/:shortURL/add", (req, res) => {
   urlDatabase[req.params.shortURL] = req.body.newURL;
   // console.log(req.body.newURL)
-  res.redirect("/urls")
+  res.redirect("/urls");
 });
 
 
