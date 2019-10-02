@@ -11,18 +11,28 @@
         </div>
       </div>
       
-      <% if(!username){ %>
-        <form method = "POST" action="/login">
+      <% if(!user){ %>
+        
+        <a style="margin: 1em; color: white; " href="/login">Login </a>
+        <a style="margin: 1em; color: white;" href="/register">Register</a>
+        <!-- <form method = "POST" action="/login">
           <input type= "text" name = "username" placeholder="Username"></input>
           <button style="margin: 5px" type="submit" class="btn btn-primary">Login</button>
           
-        </form>
+        </form> -->
       <% } else{ %>  
-        <form method = "POST" action="/logout">
-          Welcome <%= username %>!
+
+        <form method= "POST" action ="/logout" class= "pull-right" >
+          Welcome <%= user.email %>!
+          <input  type="submit" class = "btn btn-primary" style= "background-color: green" value= "logout" > </button>
+          </form> 
+        <!-- <form method = "POST" action="/logout">
+          Welcome <%= user.email %>!
+
+          
           <button style="margin: 5px" type="submit" class="btn btn-primary">Logout</button>
           
-        </form>
+        </form> -->
      <% } %>
 
 
