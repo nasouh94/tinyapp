@@ -186,9 +186,8 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post("/urls/:shortURL/add", (req, res) => {
   urlDatabase[req.params.shortURL] = {longURL:req.body.newURL,userID:req.cookies.user_id};
-  console.log(req.cookies.user_id, "1212112")
+  // console.log(req.cookies.user_id, "1212112")
 
-  // "b2xVn2": {longURL: "http://www.lighthouselabs.ca", userID:'aj481W'
   res.redirect("/urls");
 });
 
