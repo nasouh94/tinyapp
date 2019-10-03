@@ -4,7 +4,7 @@ const PORT = 8080;
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const cookieSession = require('cookie-session');
-const {findUser, generateRandomString, validateInput} = require('./helpers');
+const {findUser, generateRandomString, validateEmptyInputs} = require('./helpers');
 
 
 app.use(cookieSession({
@@ -90,21 +90,29 @@ app.get("/login",(req,res) => {
   res.render("urls_login", templateVars);
 });
 
-//validatiin for users when they log in
+//validating for users when they log in, and will redirect when username is undefined
 app.post("/login", (req, res) => {
   
   const user = findUser(req.body.email, users);
-  const errorMessage = validateInput(req.body.email, req.body.password);
+  const errorMessage = validateEmptyInputs(req.body.email, req.body.password);
+  console.log(errorMessage)
   if (errorMessage) {
     
-    return res.status(400).send(errorMessage,"error with logging in");
+    res.status(400).send(errorMessage,"error with logging in");
   }
-    
+ 
+  if (user === undefined) {
+     res.redirect("/urls")
+  }
   if (bcrypt.compareSync(req.body.password, user.password)) {
 
     req.session.user_id = user.id;
     res.redirect("/urls");
+  } else {
+    res.status(403).send("wrong");
   }
+
+  
     
 });
 
@@ -168,7 +176,7 @@ app.post("/urls/:shortURL/add", (req, res) => {
   res.redirect("/urls");
 });
 
-
+//the port the app uses to run
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });

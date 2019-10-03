@@ -16,10 +16,10 @@ const findUser = function(email, users) {
   return undefined
 }
 
-const validateInput = function(email, password) {
+const validateEmptyInputs = function(email, password) {
   if (email === "" || password === ""){
     return "error email or password cant be empty"
   }
 }
 
-module.exports = {findUser, generateRandomString, validateInput};
+module.exports = {findUser, generateRandomString, validateEmptyInputs};
