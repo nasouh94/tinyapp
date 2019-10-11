@@ -4,7 +4,7 @@ const PORT = 8080;
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const cookieSession = require('cookie-session');
-const {findUser, generateRandomString, validateEmptyInputs} = require('./helpers');
+const {findUser, generateRandomString, validateEmptyInputs, urlOwner} = require('./helpers');
 
 
 app.use(cookieSession({
@@ -148,13 +148,21 @@ app.post("/logout",(req, res) => {
 });
 
 //renders a page that shows the shorturl along with the longurl with the ability to redirect to the the website via the shorturl
+
+//fixed bug that allows uesers to highjack other user's URLs
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL,
-    user: users[req.session.user_id]
-  };
-  res.render("urls_show", templateVars);
+  if (req.session.user_id === urlOwner(urlDatabase,req.params.shortURL)) {  
+    let templateVars = {
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL].longURL,
+      user: users[req.session.user_id]
+    };
+    res.render("urls_show", templateVars); 
+  
+  } else {
+    res.status(403).send("You do not have permission to edit alter this URL")
+  }  //// bbug is here came up with this lastnigh
+  
 });
 
 //redirects the user to the website the shortned
@@ -171,9 +179,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 //adds a change to url 
 app.post("/urls/:shortURL/add", (req, res) => {
-  urlDatabase[req.params.shortURL] = {longURL:req.body.newURL,userID:req.session.user_id};
+    urlDatabase[req.params.shortURL] = {longURL:req.body.newURL,userID:req.session.user_id};
+    
+    res.redirect("/urls");
 
-  res.redirect("/urls");
 });
 
 //the port the app uses to run

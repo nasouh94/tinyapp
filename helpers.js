@@ -16,10 +16,19 @@ const findUser = function(email, users) {
   return undefined
 }
 
+function urlOwner(database, checkShortURL) {
+  for (let shortURL in database) {
+    if(shortURL === checkShortURL) {
+      return database[shortURL].userID;
+     }
+  }
+  return false;
+}
+
 const validateEmptyInputs = function(email, password) {
   if (email === "" || password === ""){
     return "error email or password cant be empty"
   }
 }
 
-module.exports = {findUser, generateRandomString, validateEmptyInputs};
+module.exports = {findUser, generateRandomString, validateEmptyInputs, urlOwner };
